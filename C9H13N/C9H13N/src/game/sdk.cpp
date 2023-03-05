@@ -54,7 +54,7 @@ int32_t cPlayer::Team()
 // Simulates shooting by writing a value to the dwForceAttack offset in memory.
 void cPlayer::Shoot()
 {
-    write<int32_t>(client + dwForceAttack, 6);
+    write<int32_t>(client + dwForceAttack, 5);
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
     write<int32_t>(client + dwForceAttack, 4);
 }
