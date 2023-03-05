@@ -22,7 +22,7 @@ uintptr_t cPlayer::LocalPlayer()
 // Simulates a jump by writing a value to the dwForceJump offset in memory.
 void cPlayer::Jump()
 {
-    write<int32_t>(client + dwForceJump, 6);
+    write<int32_t>(client + dwForceJump, 5;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
     write<int32_t>(client + dwForceJump, 4);
 }
