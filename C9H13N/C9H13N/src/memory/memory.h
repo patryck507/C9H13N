@@ -1,7 +1,10 @@
 #include <Windows.h>
 
+#include <iostream>
 #include <cstdint>
 #include <string>
+
+#pragma comment (lib, "ntdll.lib")
 
 namespace memory {
     // A variable to store the process ID of the target process
@@ -9,6 +12,10 @@ namespace memory {
 
     // A handle to the target process
     inline void* handle = nullptr;
+
+    // Import NtReadVirtualMemory and NtWriteVirtualMemory functions from kernel32.dll
+    EXTERN_C NTSTATUS NTAPI NtReadVirtualMemory(HANDLE, PVOID, PVOID, ULONG, PULONG);
+    EXTERN_C NTSTATUS NTAPI NtWriteVirtualMemory(HANDLE, PVOID, PVOID, ULONG, PULONG);
 
     // Base addresses of the client and engine modules in the target process
     inline std::uintptr_t client = 0;
@@ -26,27 +33,27 @@ namespace memory {
     // Function to close the handle to the target process
     void close_handle() noexcept;
 
-    // Templated function to read a value of type T from the target process at the specified address
+    // Template function to read a value from memory of the target process
     template <typename T>
     constexpr T read(const std::uintptr_t& addr) noexcept {
-        // Create a variable to store the value read from the target process
         T value;
-        // Use the Windows API function ReadProcessMemory to read the value from the target process
-        // The handle to the target process is stored in the 'handle' variable
-        // The address to read from is passed as a parameter
-        // The size of the value to read is determined using sizeof(T)
-        ReadProcessMemory(handle, reinterpret_cast<const void*>(addr), &value, sizeof(T), 0);
-        // Return the value read from the target process
+        // Call NtReadVirtualMemory to read the value from the target process
+        NTSTATUS status = NtReadVirtualMemory(handle, reinterpret_cast<PVOID>(addr), &value, sizeof(T), 0);
+        // Basic Error Handling
+        if (status != 0) {
+            std::cout << "\n[MEMORY] failed to read value";
+        }
         return value;
     }
 
-    // Templated function to write a value of type T to the target process at the specified address
+    // Template function to write a value to memory of the target process
     template <typename T>
     constexpr void write(const std::uintptr_t& addr, const T& value) noexcept {
-        // Use the Windows API function WriteProcessMemory to write the value to the target process
-        // The handle to the target process is stored in the 'handle' variable
-        // The address to write to is passed as a parameter
-        // The size of the value to write is determined using sizeof(T)
-        WriteProcessMemory(handle, reinterpret_cast<void*>(addr), &value, sizeof(T), 0);
+        // Call NtWriteVirtualMemory to write the value to the target process
+        NTSTATUS status = NtWriteVirtualMemory(handle, reinterpret_cast<void*>(addr), const_cast<void*>(static_cast<const void*>(&value)), sizeof(T), 0);
+        // Basic Error Handling
+        if (status != 0) {
+            std::cout << "\n[MEMORY] failed to write value";
+        }
     }
 }
