@@ -17,4 +17,3 @@ Since its public, I strongly recommend to make your own features and pack it, yo
 
 # Credits
 Thanks to [hazedumper](https://github.com/frk1/hazedumper) for providing the needed Offsets\
-Thanks to [cazzwastaken](https://github.com/cazzwastaken/cazzwastaken) for his awesome memory class
