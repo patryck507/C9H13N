@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <string>
 
-
-
 #pragma comment (lib, "ntdll.lib")
 
 namespace memory {
