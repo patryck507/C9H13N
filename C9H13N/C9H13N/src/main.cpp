@@ -1,6 +1,7 @@
 #include "memory/memory.h"
 #include "globals.h"
 #include "features/features.h"
+#include "utils/log.h"
 
 #include <iostream>
 #include <thread>
@@ -14,17 +15,17 @@ void init()
 	// If the process ID is 0, the game is not open
 	if (memory::id == 0)
 	{
-		std::cout << "\nOpen Game";
+		log(LogType::INFORMATION, "Open Game");
 		exit(1);
 	}
 
 	// Wait until serverbrowser.dll is loaded
-	std::cout << "\nwaiting for serverbrowser.dll";
+	log(LogType::INFORMATION, "waiting for serverbrowser.dll");
 	while (!memory::module_address("serverbrowser.dll"))
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
-	std::cout << "\nfound serverbrowser.dll";
+	log(LogType::SUCCESS, "Found serverbrowser.dll");
 
 	// Get the module addresses for client.dll and engine.dll
 	memory::client = memory::module_address("client.dll");
@@ -33,17 +34,18 @@ void init()
 	// If the module addresses for client.dll and engine.dll cannot be found, print an error message
 	if (!memory::client && !memory::engine)
 	{
-		std::cout << "\nFailed to read client.dll | engine.dll";
+		log(LogType::LERROR, "Failed to read client.dll | engine.dll");
 	}
+	log(LogType::SUCCESS, "Found client.dll and engine.dll");
 
 	// If the handle to the game cannot be opened, print an error message and exit the program
 	if (!memory::open_handle())
 	{
-		std::cout << "\nFailed to open a handle to the game";
+		log(LogType::LERROR, "Failed to open a handle to the game");
 		exit(2);
 	}
 
-	std::cout << "\nHandle Opened Successfully";
+	log(LogType::SUCCESS, "Handle created");
 
 	// Set the run flag to true to indicate that the cheat is running
 	globals::run = true;

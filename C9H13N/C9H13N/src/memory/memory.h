@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <string>
 
+
+
 #pragma comment (lib, "ntdll.lib")
 
 namespace memory {
@@ -41,7 +43,7 @@ namespace memory {
         NTSTATUS status = NtReadVirtualMemory(handle, reinterpret_cast<PVOID>(addr), &value, sizeof(T), 0);
         // Basic Error Handling
         if (status != 0) {
-            std::cout << "\n[MEMORY] failed to read value";
+            std::cout << "ERROR - Failed to read value" << std::endl;
         }
         return value;
     }
@@ -53,7 +55,7 @@ namespace memory {
         NTSTATUS status = NtWriteVirtualMemory(handle, reinterpret_cast<void*>(addr), const_cast<void*>(static_cast<const void*>(&value)), sizeof(T), 0);
         // Basic Error Handling
         if (status != 0) {
-            std::cout << "\n[MEMORY] failed to write value";
+            std::cout << "ERROR - Failed to write value" << std::endl;
         }
     }
 }

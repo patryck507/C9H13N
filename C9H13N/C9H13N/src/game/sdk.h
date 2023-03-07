@@ -10,5 +10,6 @@ public:
     int32_t Health();
     int32_t CrosshairID();
     int32_t Team();
+    int32_t ShotsFired();
     void Shoot();
 };

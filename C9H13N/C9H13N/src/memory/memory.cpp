@@ -49,6 +49,7 @@ std::uintptr_t memory::module_address(const std::string name) noexcept {
 
 // Opens a handle to the process with the ID stored in memory::id.
 // Returns true if the handle was successfully opened.
+// Handle is opened with ALL_ACCESS flag.
 bool memory::open_handle() noexcept {
 	return memory::handle = OpenProcess(PROCESS_ALL_ACCESS, 0, memory::id);
 }

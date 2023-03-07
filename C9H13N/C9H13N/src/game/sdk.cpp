@@ -51,6 +51,13 @@ int32_t cPlayer::Team()
     return read<int32_t>(cPlayer::LocalPlayer() + m_iTeamNum);
 }
 
+// Returns the amount of shots fired by the local player object.
+int32_t cPlayer::ShotsFired()
+{
+    return read<int32_t>(cPlayer::LocalPlayer() + m_iShotsFired);
+}
+
+
 // Simulates shooting by writing a value to the dwForceAttack offset in memory.
 void cPlayer::Shoot()
 {
