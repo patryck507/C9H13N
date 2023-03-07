@@ -67,11 +67,17 @@ int main()
 	// Wait for the cheat to finish running
 	while (globals::run)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (GetAsyncKeyState(VK_HOME))
+		{
+			// Turn of all features
+			globals::run = false;
+			// Close the handle to the game
+			memory::close_handle();
+
+			log(LogType::SUCCESS, "Handle Closed, Exiting.");
+			// Exit
+			return 0;
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-
-	// Close the handle to the game
-	memory::close_handle();
-
-	return 0;
 }
